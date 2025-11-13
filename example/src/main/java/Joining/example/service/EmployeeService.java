@@ -5,6 +5,7 @@ import Joining.example.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,5 +69,31 @@ public class EmployeeService {
     
     return employeeRepository.save(existingEmployee);
 }
+
+public Long getTotalEmployees() {
+        return employeeRepository.count();
+    }
+
+    public Long getNewEmployeesThisMonth() {
+        // Calculate statistics from the employee list
+        List<Employee> employees = getAllEmployees();
+        LocalDate now = LocalDate.now();
+        return employees.stream()
+                .filter(emp -> {
+                    LocalDate joinDate = emp.getStartDate();
+                    return joinDate.getMonthValue() == now.getMonthValue() && 
+                           joinDate.getYear() == now.getYear();
+                })
+                .count();
+    }
+
+    public Long getDepartmentsCount() {
+        // Calculate distinct departments from the employee list
+        List<Employee> employees = getAllEmployees();
+        return employees.stream()
+                .map(Employee::getDepartment)
+                .distinct()
+                .count();
+    }
 }
 
