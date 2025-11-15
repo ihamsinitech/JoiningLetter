@@ -734,7 +734,7 @@
 
                 <div class="form-group">
                     <label for="hrManager">HR Manager *</label>
-                    <input type="text" id="hrManager" name="hrManager" value="Manikanta Sharma" required>
+                    <input type="text" id="hrManager" name="hrManager" value="Aruna" required>
                 </div>
 
                 <button type="submit" class="btn btn-block">
@@ -1402,7 +1402,7 @@
                             <p><strong>For Hamsini Tech Solutions:</strong></p>
                             <div class="signature-line"></div>
                             <img src="stamp.png" width="80px" height="70px" />
-                            <p>Name: <strong id="companySignatory"></strong></p>
+                            <p>Name: <strong>Manikanta Sharma</strong></p>
                             <p> Managing Director </p>
                             <p>Date: <span id="companySignDate"></span></p>
                         </div>
@@ -1445,7 +1445,7 @@
     const { jsPDF } = window.jspdf;
 
     document.addEventListener('DOMContentLoaded', function () {
-        const BASE_URL = 'http://3.109.59.74:8082/api';
+        const BASE_URL = 'http://localhost:8082/api';
 
         // Set current date
         const today = new Date();
@@ -1456,7 +1456,7 @@
         });
 
         // Set minimum date for start date to today
-        document.getElementById('startDate').min = new Date().toISOString().split('T')[0];
+        // document.getElementById('startDate').min = new Date().toISOString().split('T')[0];
 
         // Elements
         const employeeForm = document.getElementById('employeeForm');
@@ -1653,7 +1653,22 @@
 
         // Populate appointment letter with data across all pages
         function populateAppointmentLetter(data) {
-            const joiningDate = new Date(data.startDate).toLocaleDateString('en-US', options);
+            // const joiningDate = new Date(data.startDate).toLocaleDateString('en-US', options);
+
+            // Safe element setter with logging
+    function safeSet(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = value;
+            console.log(`✅ Set ${id}: ${value}`);
+        } else {
+            console.warn(`❌ Element not found: ${id}`);
+        }
+    }
+
+    try {
+        const joiningDate = new Date(data.startDate).toLocaleDateString('en-US', options);
+        console.log('Formatted joining date:', joiningDate);
 
             // Page 1: Main Letter
             document.getElementById('employeeName').textContent = data.fullName;
@@ -1675,8 +1690,13 @@
             // Page 10: Final Acceptance
             document.getElementById('acceptanceName').textContent = data.fullName;
             document.getElementById('finalEmployeeName').textContent = data.fullName;
-            document.getElementById('companySignatory').textContent = data.hrManager;
+            // document.getElementById('companySignatory').textContent = data.hrManager;
         }
+        catch (error) {
+        console.error('❌ Error in populateAppointmentLetter:', error);
+        // Don't throw the error - continue to show the letter
+    }
+}
 
         // Back to form button - with edit capability
         document.getElementById('backBtn').addEventListener('click', function () {

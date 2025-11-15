@@ -32,8 +32,8 @@ public class Employee {
     @Column(nullable = false)
     private String fullName;
 
-    @NotBlank(message = "Employee ID is required")
-    @Column(nullable = false, unique = true)
+     //@NotBlank(message = "Employee ID is required")
+    @Column(nullable = false, unique = true,updatable = false  ) 
     private String employeeId;
 
     @NotBlank(message = "Position is required")
@@ -88,6 +88,7 @@ public class Employee {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDate.now();
+        // this.employeeId="EMP" +System.currentTimeMillis();
     }
 
     @NotNull(message = "Annual salary is required")
